@@ -3,7 +3,7 @@ from copy import copy
 from dataclasses import dataclass, is_dataclass
 from enum import Enum
 from typing import (
-    Any,
+    Optional, Any,
     Callable,
     Deque,
     Dict,
@@ -116,10 +116,11 @@ if PYDANTIC_V2:
         def validate(
             self,
             value: Any,
-            values: Dict[str, Any] = {},  # noqa: B006
+            values: Optional[Dict[str, Any]] = None,  # noqa: B006
             *,
             loc: Tuple[Union[int, str], ...] = (),
         ) -> Tuple[Any, Union[List[Dict[str, Any]], None]]:
+            values = {} if values is None else values
             try:
                 return (
                     self._type_adapter.validate_python(value, from_attributes=True),
